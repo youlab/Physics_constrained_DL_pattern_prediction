@@ -172,7 +172,7 @@ Simulation_templated_pattern_prediction/
 
 
 
-More code details(Should I keep this or nuke it🤔):
+More code details:
 
 
 1) ***seed_to_sim1_sim2_deterministic***
