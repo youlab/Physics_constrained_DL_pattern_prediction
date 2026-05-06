@@ -43,7 +43,7 @@ import matplotlib as mpl
 # BASE CONFIGURATION - ONLY PATH USERS NEED TO CHANGE
 # ==============================================================================
 
-DATA_DIR = Path("/hpc/group/youlab/ks723/Physics_constrained_DL_pattern_prediction/data")  # <-- Change this to your data storage location
+DATA_DIR = Path("/hpc/group/youlab/ks723/Physics_constrained_DL_pattern_prediction/data_dup")  # <-- Change this to your data storage location
 
 # Repository root (auto-detected)
 REPO_DIR = Path(__file__).resolve().parent
@@ -101,7 +101,7 @@ SIMULATION_TEST_OUTPUT_FOLDER_TDB_2 = str(SEED_TO_SIM_DIR / "Sim_050924_complex_
 
 # Latents and model
 LATENT_OUTPUT_TDB_SAVED = str(LATENTS_DIR / "latents_complex.pickle")
-MODEL_DILRESNET_FIG3 = str(SEED_TO_SIM_MODELS_DIR / "Pixel_32x32x3to32x32x4_dilRESNET_graypatterns_intermediatetocomplex_Model_30000_v101_Cluster_GPU_tfData-1759363890_best.pt")
+MODEL_DILRESNET_FIG3 = str(SEED_TO_SIM_MODELS_DIR / "Pixel_32x32x3to32x32x4_dilRESNET_graypatterns_intermediatetocomplex_Model_30000_v102_9-1759430803.pt")
 
 # ==============================================================================
 # FIGURE 4: Data Efficiency Analysis (Training Set Size vs Performance)

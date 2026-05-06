@@ -14,6 +14,7 @@ Prerequisites:
 
 import argparse
 import sys
+import os
 from pathlib import Path
 from datetime import datetime
 
@@ -22,6 +23,14 @@ REPO_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(REPO_DIR))
 
 from config_automate import validate_setup, DATA_DIR
+
+# Redirect HuggingFace cache to avoid filling home directory
+# This is critical for Fig 5 which loads HuggingFace models internally
+hf_cache_dir = DATA_DIR / ".huggingface_cache"
+hf_cache_dir.mkdir(exist_ok=True)
+os.environ["HF_HOME"] = str(hf_cache_dir)
+os.environ["HUGGINGFACE_HUB_CACHE"] = str(hf_cache_dir)
+os.environ["TRANSFORMERS_CACHE"] = str(hf_cache_dir)
 from figure_generators.fig1 import generate_fig1
 from figure_generators.fig2 import generate_fig2
 from figure_generators.fig3 import generate_fig3
