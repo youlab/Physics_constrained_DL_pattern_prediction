@@ -74,8 +74,7 @@ dataloader = DataLoader(dataset, num_workers=0, batch_size=batch_size, shuffle=T
 logger = ImageLogger(batch_frequency=logger_freq)
 
 fixed_cb = FixedEval(fixed_batch, every=300, outdir="eval_fixed", steps=30, eta=0.0, scale=9.0)
-trainer = pl.Trainer(gpus=1, precision=32, callbacks=[logger, fixed_cb],max_epochs=5)
-
+trainer = pl.Trainer(enable_progress_bar=False,gpus=1, precision=32, callbacks=[logger, fixed_cb],max_epochs=5)
 
 # Train!
 trainer.fit(model, dataloader) 
