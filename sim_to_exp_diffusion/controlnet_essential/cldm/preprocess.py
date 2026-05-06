@@ -824,3 +824,54 @@ def preprocess_experimental_initialstage(img_path, img_length=256,img_width=256)
         return None
 
 
+# additional test to see if results change based on different preprocessing of the final image
+
+def preprocess_experimental_backgroundblack(exp_path, top_crop=25, bottom_crop=25, left_crop=25, right_crop=25,
+                                     img_length=256, img_width=256):
+  
+    """
+    Preprocess a single image(crops, applies white background mask and resizes) from the given path and return a PIL-compatible output.
+    
+    Parameters:
+        exp_path (str): Path to the experimental image file, assumes experimental image is already processed to exclude petri dish area and that area is black
+        top_crop (int): Pixels to crop from the top.---------- 
+        bottom_crop (int): Pixels to crop from the bottom.----All are kept 25 for experimental images 
+        left_crop (int): Pixels to crop from the left.--------
+        right_crop (int): Pixels to crop from the right.------
+        img_length (int): Desired output image height.
+        img_width (int): Desired output image width.
+        
+    Returns:
+        Resized background white image as a numpy array converted to RGB.
+    """
+    # Read image using cv2
+    img_array = cv2.imread(exp_path,cv2.IMREAD_COLOR)  # Read in color to preserve colony colors
+    # print(img_array.shape)
+
+   # convert to RGB
+    img_array = cv2.cvtColor(img_array, cv2.COLOR_BGR2RGB)
+
+    # resize the array
+    img_array = cv2.resize(img_array, (img_width, img_length))
+
+    if img_array is None:
+        print(f"Failed to load image at {exp_path}")
+        return None
+
+    ########################
+    # do some cropping , note do appropriate cropping for simulation images too
+    #########################
+
+    new_height = img_array.shape[0] - (top_crop + bottom_crop)
+    new_width = img_array.shape[1] - (left_crop + right_crop)
+
+    new_array_i = img_array[top_crop:top_crop+new_height, left_crop:left_crop+new_width]
+
+    # keep the black areas as black for this function
+    # # now change black to white for the masked area
+    # new_array_i[np.all(new_array_i == [0,0,0], axis=-1)] = [255,255,255]  # change black to white
+
+    # resize after cropping
+    new_array_i = cv2.resize(new_array_i, (img_width, img_length))
+
+    return new_array_i
