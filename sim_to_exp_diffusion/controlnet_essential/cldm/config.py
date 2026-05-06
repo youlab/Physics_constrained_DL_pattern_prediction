@@ -1,6 +1,6 @@
 import matplotlib as mpl
 from pathlib import Path
-from datetime import datetime   
+from datetime import datetime
 
 currentMinute = datetime.now().minute
 currentHour   = datetime.now().hour
@@ -62,9 +62,10 @@ CKPT_PATH='/hpc/dctrl/ks723/Physics_constrained_DL_pattern_prediction/sim_to_exp
 CKPT_PATH_SEEDTOEXP="/hpc/dctrl/ks723/Physics_constrained_DL_pattern_prediction/sim_to_exp_diffusion/controlnet_essential/lightning_logs/version_37726282/checkpoints/epoch=4-step=51124.ckpt" # checkpoint_seedtoexp.tar
 
 
+# For testing information encoding decoding 
 
-
-
+SIM_FOLDER_TEST_INFOENCODING_MORESEEDS= '/hpc/group/youlab/ks723/storage/MATLAB_SIMS/Sim_050924/Sim_input/intermediate/Tp3'  # folder with more seeds, upto 20
+OUTPUT_DIR_SIMTOEXP_INFOENCODING = f"/hpc/group/youlab/ks723/storage/Physics_constrained_DL_pattern_prediction/inference/v{currentYear}{currentMonth}{currentDay}_{currentHour}_SIMTOEXP"
 
 
 
