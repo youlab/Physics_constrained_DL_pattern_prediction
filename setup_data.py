@@ -62,7 +62,8 @@ def download_datasets():
     snapshot_download(
         repo_id="HotshotGoku/Simulation_templated_pattern_prediction",
         repo_type="dataset",
-        local_dir=DATA_DIR
+        local_dir=DATA_DIR ,
+        cache_dir=HF_CACHE_DIR
     )
     
     print("Download complete!\n")
