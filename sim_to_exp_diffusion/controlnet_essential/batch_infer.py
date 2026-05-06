@@ -29,7 +29,7 @@ ARGS = {
   "prompt":   "",
   "a_prompt": "",
   "n_prompt": "longbody, lowres, bad anatomy, cropped, worst quality, low quality",
-  "num_samples":   5,
+  "num_samples":   2,
   "image_resolution":256,
   "ddim_steps":     50,
   "guess_mode":     False,
