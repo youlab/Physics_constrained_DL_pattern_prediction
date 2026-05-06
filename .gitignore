@@ -30,3 +30,5 @@ Readme_hfdataset.md
 /nohup.out
 /slurm_setup_data_40468402.out
 /slurm_setup_data_40468402.err
+intrinsic_dimension_instance.py
+/seed_to_sim1_sim2_deterministic/slurm_scripts/intrinsic_dimension_calculation.sh
