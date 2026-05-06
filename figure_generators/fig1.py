@@ -31,23 +31,23 @@ def generate_fig1a(output_dir):
     """
     Generate Figure 1A: Seed, Simulation, and Experimental pattern comparison
     """
-    # Get file lists
-    seed_files = []
-    for f in FILES_FIG1A:
-        base = os.path.splitext(f)[0]      # e.g. "Fixed_19_6"
-        _, x, _ = base.split('_')           # x == "19"
-        seed_name = f"Input_Fixed_{x}.png"
-        seed_files.append(seed_name)
+    # Get file lists, old naming scheme so commented out
+    # seed_files = []
+    # for f in FILES_FIG1A:
+    #     base = os.path.splitext(f)[0]      # e.g. "Fixed_19_6"
+    #     _, x, _ = base.split('_')           # x == "19"
+    #     seed_name = f"Input_Fixed_{x}.png"
+    #     seed_files.append(seed_name)
 
-    # Process images
-    seed_data = preprocess_simulation_input_data(SEED_FOLDER, 0, len(seed_files), img_filenames=seed_files)
+    # Process images # note for this figure, we use minimal cropping 
+    seed_data = preprocess_simulation_input_data(SEED_FOLDER, 0, len(FILES_FIG1A), img_filenames=FILES_FIG1A)
     seed_images = [data[0] for data in seed_data]
     seed_images = [cv2.cvtColor(img, cv2.COLOR_GRAY2RGB) if len(img.shape)==2 else img for img in seed_images]
 
-    sim_data = preprocess_simulation_output_data(SIMULATED_FOLDER, 0, len(FILES_FIG1A), img_filenames=FILES_FIG1A)
+    sim_data = preprocess_simulation_output_data(SIMULATED_FOLDER, 0, len(FILES_FIG1A), img_filenames=FILES_FIG1A,top_crop=0,bottom_crop=0, left_crop=0, right_crop=2)
     sim_images = [data[0] for data in sim_data]
 
-    exp_data = preprocess_experimental_backgroundwhite_rawfiles(EXPERIMENTAL_FOLDER, 0, len(FILES_FIG1A), img_filenames=FILES_FIG1A)
+    exp_data = preprocess_experimental_backgroundwhite_rawfiles(EXPERIMENTAL_FOLDER, 0, len(FILES_FIG1A), img_filenames=FILES_FIG1A,top_crop=0,bottom_crop=0, left_crop=0, right_crop=0)
     exp_images = exp_data
 
     # Plot
@@ -73,7 +73,7 @@ def generate_fig1b_sim(output_dir):
     Generate Figure 1B (Simulation): VAE encoding/reconstruction of simulated patterns
     """
     # Process simulation images
-    sim_data = preprocess_simulation_output_data(SIMULATED_FOLDER, 0, len(FILES_FIG1B), img_filenames=FILES_FIG1B)
+    sim_data = preprocess_simulation_output_data(SIMULATED_FOLDER, 0, len(FILES_FIG1B), img_filenames=FILES_FIG1B,top_crop=0,bottom_crop=0, left_crop=0, right_crop=2)
     sim_images = [data[0] for data in sim_data]
     sim_images = np.array(sim_images)
 
@@ -106,7 +106,7 @@ def generate_fig1b_exp(output_dir):
     Generate Figure 1B (Experimental): VAE encoding/reconstruction of experimental patterns
     """
     # Process experimental images
-    exp_data = preprocess_experimental_backgroundwhite_rawfiles(EXPERIMENTAL_FOLDER, 0, len(FILES_FIG1B), img_filenames=FILES_FIG1B)
+    exp_data = preprocess_experimental_backgroundwhite_rawfiles(EXPERIMENTAL_FOLDER, 0, len(FILES_FIG1B), img_filenames=FILES_FIG1B,top_crop=0,bottom_crop=0, left_crop=0, right_crop=0)
     exp_images = np.array(exp_data)
 
     # Normalize and prepare for VAE
