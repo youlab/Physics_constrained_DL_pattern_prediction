@@ -1,7 +1,7 @@
 # Simulation_templated_pattern_prediction
 ![Maintenance](https://img.shields.io/badge/maintenance-active-brightgreen)
 
-For the manuscript:  Simulation-templated, photorealistic prediction of self-organized bacterial patterns using a foundational image model by Kinshuk Sahu, Harris M. Davis, Jia Lu, César A. Villalobos, Avi Heyman, Emrah Şimşek and Lingchong You
+For the manuscript:  Simulation-templated photorealistic prediction of bacterial patterns by Kinshuk Sahu, Harris M. Davis, Jia Lu, César A. Villalobos, Avi Heyman, Emrah Şimşek and Lingchong You
 
 See Notes section at the end for information about execution of these various scripts. 
 
@@ -172,7 +172,7 @@ Simulation_templated_pattern_prediction/
 
 
 
-More code details(Should I keep this or nuke it🤔):
+More code details:
 
 
 1) ***seed_to_sim1_sim2_deterministic***
