@@ -9,4 +9,4 @@
 
 source ~/.bashrc  
 conda activate pytorch_PA_patternprediction
-python reproduce_figures.py --figures 6
+python reproduce_figures.py 
