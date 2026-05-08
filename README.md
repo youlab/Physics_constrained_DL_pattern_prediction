@@ -1,14 +1,15 @@
 # Simulation_templated_pattern_prediction
 ![Maintenance](https://img.shields.io/badge/maintenance-active-brightgreen)
 
-For the manuscript:  Simulation-templated photorealistic prediction of bacterial patterns by Kinshuk Sahu, Harris M. Davis, Jia Lu, César A. Villalobos, Avi Heyman, Emrah Şimşek and Lingchong You
+For the manuscript: Mechanistically conditioned generative modeling of biologically realistic bacterial patterns by Kinshuk Sahu, Harris M. Davis, Jia Lu, César A. Villalobos, Avi Heyman, Emrah Şimşek and Lingchong You
 
 See Notes section at the end for information about execution of these various scripts. 
 
-The code is divided into three folders
+The code is divided into four folders
 1) ***seed_to_sim1_sim2_deterministic***
 2) ***sim_to_exp_diffusion***
 3) ***sim_generation***
+4) ***information_encoding_decoding***
 
 In the current version of the paper these three folder correspond to the following tasks-
 1) **Pre-trained Stable Diffusion VAE for image compression and training NN on the compressed latent embeddings**
@@ -24,6 +25,9 @@ We use this pipeline to demonstrate generative pattern prediction of experiments
 Contains the details of generating simulations with varying end-point patterns with parallel processing using CPUs for generating a large number of patterns. Code is modified from Nan Luo's MSB 2021 [Paper](https://www.embopress.org/doi/full/10.15252/msb.202010089) [Code](https://github.com/youlab/OptimalPatterns_NanLuo) 
 
 
+4) **Testing the pipeline with inverse problem preidction**
+
+We test the diffusion generation framework with a synthetic-to-real task prediction. A model is trained to decode the intial conditions from synthetically generated experimental-like patterns, and then tested on experimental images. We use a custom U-Net with ResNet blocks for this task. We also use Stable Diffusion v1-5 Autoencoder from [Huggingface Diffusers Library](https://huggingface.co/stable-diffusion-v1-5/stable-diffusion-v1-5) for compact latent representation. 
 
 ### Note (if you wanted to work with this repo): 
 
@@ -60,6 +64,8 @@ Contains the details of generating simulations with varying end-point patterns w
     v) For training the models in the deterministic pipeline,you can work with what you have for Fig 2 and 3. For Fig 4, you would have to run the DataDemand_Augmentation.py code first, edit wherever your files are saved in the config file. Then run the `latent_complex_dataaugmentation.py` and `latent_intermediate_dataaugmentation.py`. Some of these files have a taskID in the code to run parallel jobs, if you do not have SLURM, replace these accordingly in the code. 
     For training the models in the sim_to_exp_diffusion pipeline (Fig 5), it is imperative to run the Experimental+ Simulation augmentation script (`Augmentation_ExpandSim_optimized.py`) to generate ~40k patterns for experimental-simulation dataset from the base ~400 patterns. Change the locations in the config file. 
     If you want to generate the Supplementary Figure 7 in the paper, you would have to run the Experimental+Simulation augmentation script from the point above first, then run `latent_from_Exp_images.py` and `latent_from_SimcorrtoExp_images.py`. Change the locations in the config file.
+    
+    vi) Running the Figure 6 pipeline would require generating a large synthetic dataset. For this you can run 'batch_infer_Inf_ed_MORE_3x30000.py' in parallel processing, which can be done in about 2 hours total using the setup provided. For the Supplementary Figure 20, which uses simulations, the base simulation dataset is same as Figure 2, and can be augmented by rotations using the script SeedplusSim_rotation_3reps.py. 
 
 Note: Steps i) and iii) are executed by default with setup_data.py. You can save time, but you need to update the config files under utils.config and cldm.config accordingly. The slurm scripts that were used to run the python files on the Duke computing cluster have also been attached for your reference. You can modify the gpu nodes and file locations appropriately. 
 
@@ -120,20 +126,22 @@ Simulation_templated_pattern_prediction/
 │   └── Training_simtoexp_dilResNets.py                                     # Training: Sim to Exp
 │
 ├── sim_generation/                          
-│   ├── Slurm_scripts/                                   # Running MATLAB jobs on DCC
-│   ├── Branching_diffusion.m                            # Function for branching, unchanged from MSB 2021
-│   ├── ExptoSim_MAT.m                                   # Convert fixed experimental seeding to corresponding simulation seeding 
-│   ├── Img_design.m                                     # Design fixed seeding test set for deterministic pipeline
-│   ├── Optimal_Patterns_3Tp2Cond_ModelTesting.m         # Generate simulations for test set for default and TDB patterns 
-│   ├── Optimal_Patterns_3Tp2Cond_vmod.m                 # Generate simulations for train set for default and TDB patterns  
-│   ├── Optimal_Patterns_ExperimentalCondns.m            # Generate simulations corresponding to experimental training/test set (random configs)
-│   ├── Optimal_Patterns_ExperimentalCondns_Fixedgrid.m  # Generate simulations corresponding to experimental training set (fixed config)
-│   ├── Parameters_multiseeding.mat                      # Parameters for multiseeding, unchanged from MSB 2021
-│   ├── Patterns_generator_experimental.m                # Generate 1000 random seeding configs for exp
-│   ├── SimulatedGridMATgeneration.m                     # Convert random experimental seeding to corresponding simulation seeding 
-│   ├── designs_24_10_02.mat                             # Saved predefined grids from Img_design.m
-│   ├── simulatedPatterns.mat                            # Simulated seeding grids from SimulatedGridMATgeneration.m
-│   └── simulatedPatterns_Fixed.mat                      # Simulated seeding grids from ExptoSim_MAT.m
+│   ├── Slurm_scripts/                                           # Running MATLAB jobs on DCC
+│   ├── Branching_diffusion.m                                    # Function for branching, unchanged from MSB 2021
+│   ├── ExptoSim_MAT.m                                           # Convert fixed experimental seeding to corresponding simulation seeding 
+│   ├── Img_design.m                                             # Design fixed seeding test set for deterministic pipeline
+│   ├── Optimal_Patterns_3Tp2Cond_ModelTesting.m                 # Generate simulations for test set for default and TDB patterns 
+│   ├── Optimal_Patterns_3Tp2Cond_vmod.m                         # Generate simulations for train set for default and TDB patterns  
+│   ├── Optimal_Patterns_ExperimentalCondns.m                    # Generate simulations corresponding to experimental training/test set (random configs)
+│   ├── Optimal_Patterns_ExperimentalCondns_Fixedgrid.m          # Generate simulations corresponding to experimental training set (fixed config)
+│   ├── Optimal_Patterns_ExperimentalCondns_Fixedgrid_testset.m  # Generate simulations corresponding to experimental test set (fixed config)
+│   ├── Parameters_multiseeding.mat                              # Parameters for multiseeding, unchanged from MSB 2021
+│   ├── Patterns_generator_experimental.m                        # Generate 1000 random seeding configs for exp
+│   ├── SimulatedGridMATgeneration.m                             # Convert random experimental seeding to corresponding simulation seeding 
+│   ├── designs_24_10_02.mat                                     # Saved predefined grids from Img_design.m
+│   ├── simulatedPatterns.mat                                    # Simulated seeding grids from SimulatedGridMATgeneration.m
+│   ├── simulatedPatterns_Fixed_testset.mat                      # Simulated seeding grids for Fixed test set Experiments
+│   └── simulatedPatterns_Fixed.mat                              # Simulated seeding grids from ExptoSim_MAT.m
 │
 ├── sim_to_exp_diffusion/                    
 │   └── controlnet_essential/                       # (following files were changed from original ControlNet)
@@ -147,6 +155,7 @@ Simulation_templated_pattern_prediction/
 │       ├── batch_infer_ablation.py                 # Inference: Parameter variation
 │       ├── batch_infer_seedsweep.py                # Inference: Diffusion model starting random noise change
 │       ├── batch_infer_seedtoexp.py                # Inference: Test set, seed to exp
+│       ├── batch_infer_Inf_ed_MORE_3x30000.py      # Inference: Synthetic dataset creation (Fig 6) from Simulations used in Fig 2
 │       ├── create_promptjson.ipynb                 # source, target and hint(blank test) for training model
 │       ├── DissimilarityScore_Seeding.ipynb        # Siamese network to calculate dissimilarity (Supp Fig 17,18)
 │       ├── inference_gradio.ipynb                  # Web interface for running inference
@@ -161,6 +170,29 @@ Simulation_templated_pattern_prediction/
 │       ├── seedtoexp_train.py                      # Training: seed to exp
 │       ├── simtoexp_dataset.py                     # Training: Dataset creation default
 │       └──simtoexp_train.py                        # Training: default
+|
+├── information_encoding_decoding/                          
+│   ├── Slurm_scripts/                       # Running python jobs on DCC
+│   ├── utils/                               
+│   │   ├── config.py                        # Physical locations of files generated and imported
+│   │   ├── metrics.py                       # Various metrics like tolerance F1 score, Dice loss, MSE loss...
+│   │   └── preprocess.py                    # Preprocess functions
+|   ├── losses/                               
+│   │   └── dice_loss.py                     # Backprop-able Dice loss 
+│   ├── models/                               
+│   │   ├── UNet_ResBlocks.py                # Custom UNet implementation
+│   │   └── vae.py                           # SD VAE v1-5
+│   ├── Display_Fig6_SuppFig20.ipynb         # Experimental-like pattern generation, exp-seed and sim-seed mapping                 
+│   ├── Evaluation_metrics_exptoseed.ipynb   # Metrics in Supp Table 2 for exp to seed mapping
+│   ├── Evaluation_metrics_simtoseed.ipynb   # Metrics in Supp Table 2 for sim to seed mapping
+│   ├── expcolortoseed_dataset.py            # Training: Dataset creation exp to seed
+│   ├── expcolortoseed_vae_train_GPUs.py     # Training: exp to seed 
+│   ├── SeedDataset_MORE_Diffusion.ipynb     # Creating triplicates copies of seed for one to one match with exp to seed mapping
+│   ├── SeedplusSim_rotation_3reps.ipynb     # Augmentation with rotation for simulation pattern dataset from Fig2
+│   ├── simtoseed_dataset.py                 # Training: Dataset creation sim to seed
+│   └── simtoseed_vae_train_GPUs.py          # Training: sim to seed 
+│
+│   
 │
 ├── figure_generators/                       # Each figures' inference pipelines in a single py file
 ├── config_automate.py                       # Physical locations for running the inference pipeline with a single line of code
