@@ -56,6 +56,7 @@ REPO_DIR = Path(__file__).resolve().parent
 EXTRACTED_DIR = DATA_DIR / "extracted"
 SEED_TO_SIM_DIR = EXTRACTED_DIR / "seed_to_sim_deterministic"
 SIM_TO_EXP_DIR = EXTRACTED_DIR / "sim_to_exp_diffusion"
+INFO_ENCODING_DIR = EXTRACTED_DIR / "information_encoding_decoding"
 LATENTS_DIR = EXTRACTED_DIR / "latents"
 
 # Models directory (trained models are in extracted data)
@@ -135,6 +136,25 @@ CKPT_PATH = str(SIM_TO_EXP_DIR / "checkpoint_simtoexp" / "epoch=4-step=51124.ckp
 OUTPUT_DIR_SIMTOEXP = str(Path(__file__).parent / "inference" / "temp_simtoexp")
 
 # ==============================================================================
+# FIGURE 6: Information Encoding/Decoding (Inverse Problem)
+# ==============================================================================
+
+# Data folders (reuse existing ones from Figures 2 and 5)
+SIM_FOLDER_TEST_INFOENCODING_MORESEEDS = str(SEED_TO_SIM_DIR / "Sim_050924_intermediate_Tp3")  # Already extracted for Fig 2
+SEED_FOLDER_TEST_INFOENCODING_MORESEEDS = str(SEED_TO_SIM_DIR / "Sim_050924_seed")  # Already extracted for Fig 2
+EXP_FOLDER_TEST_FIG6 = str(SIM_TO_EXP_DIR / "Exp_testset")  # Already extracted for Fig 5
+
+# New folders specific to Figure 6
+SPECIFIC_FOLDER_EXP_DIFFUSION_MORE = str(INFO_ENCODING_DIR / "Generated_patterns_selected")  # Synthetic experimental-like patterns
+SEED_FOLDER_EXPTOSIM_TEST_32X32 = str(INFO_ENCODING_DIR / "Exp_testset_seed")  # Seed images for exp test set
+SEED_FOLDER_EXPTOSIM_TEST_FIXED_32X32 = str(INFO_ENCODING_DIR / "Exp_testset_fixed_seed")  # Fixed seed images
+EXP_FOLDER_EXPTOSIM_TEST_FIXED = str(INFO_ENCODING_DIR / "Exp_testset_fixed")  # Fixed experimental patterns
+
+# Model checkpoints
+CKPT_PATH_MORESEEDS_DIFFUSION = str(INFO_ENCODING_DIR / "checkpoint_exptoseed" / "best-epoch=169-val_loss=0.3398.ckpt")  # Exp to seed model
+CKPT_PATH_SEEDTOSIM_MORESEEDS_3ROTREPS = str(INFO_ENCODING_DIR / "checkpoint_simtoseed" / "best-epoch=290-val_loss=0.0080.ckpt")  # Sim to seed model
+
+# ==============================================================================
 # VALIDATION: Check if setup has been completed
 # ==============================================================================
 
@@ -150,6 +170,7 @@ def validate_setup():
         EXTRACTED_DIR,
         SEED_TO_SIM_DIR,
         SIM_TO_EXP_DIR,
+        INFO_ENCODING_DIR,
         LATENTS_DIR,
         SEED_TO_SIM_MODELS_DIR
     ]
@@ -164,7 +185,9 @@ def validate_setup():
         LATENT_OUTPUT_TDB_SAVED,
         MODEL_DILRESNET_FIG2,
         MODEL_DILRESNET_FIG3,
-        CKPT_PATH
+        CKPT_PATH,
+        CKPT_PATH_MORESEEDS_DIFFUSION,
+        CKPT_PATH_SEEDTOSIM_MORESEEDS_3ROTREPS
     ]
     
     for path in critical_files:

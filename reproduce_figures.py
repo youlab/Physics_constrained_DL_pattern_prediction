@@ -36,6 +36,7 @@ from figure_generators.fig2 import generate_fig2
 from figure_generators.fig3 import generate_fig3
 from figure_generators.fig4 import generate_fig4ab, generate_fig4cd
 from figure_generators.fig5 import generate_fig5
+from figure_generators.fig6 import generate_fig6
 
 
 def main():
@@ -53,7 +54,7 @@ Examples:
         '--figures',
         type=int,
         nargs='+',
-        choices=[1, 2, 3, 4, 5],
+        choices=[1, 2, 3, 4, 5, 6],
         help='Specific figures to generate (e.g., --figures 1 2 3)'
     )
     parser.add_argument(
@@ -100,7 +101,7 @@ Examples:
     print(f"Output directory: {output_dir}\n")
     
     # Determine which figures to generate
-    figures_to_generate = args.figures if args.figures else [1, 2, 3, 4, 5]
+    figures_to_generate = args.figures if args.figures else [1, 2, 3, 4, 5, 6]
     
     print("=" * 70)
     print(f"Generating figures: {', '.join(map(str, figures_to_generate))}")
@@ -151,6 +152,13 @@ Examples:
                 paths = generate_fig5(output_dir)
                 results[5] = {'status': 'success', 'paths': paths}
                 print(f"Figure 5 complete: {paths[0]}")
+                
+            elif fig_num == 6:
+                print("Generating Figure 6: Information Encoding/Decoding (Inverse Problem)")
+                print("Note: This requires trained inverse models...")
+                paths = generate_fig6(output_dir)
+                results[6] = {'status': 'success', 'paths': paths}
+                print(f"Figure 6 complete: {len(paths)} files generated")
                 
         except Exception as e:
             print(f"Error generating Figure {fig_num}: {e}")

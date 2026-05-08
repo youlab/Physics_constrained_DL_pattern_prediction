@@ -116,6 +116,23 @@ def extract_tar_files():
             print(f"  Copying {file}...")
             shutil.copy2(src, os.path.join(sim_exp_extract, file))
     
+    # Extract tar files from information_encoding_decoding folder
+    print("\nExtracting information_encoding_decoding files...")
+    info_encoding_dir = os.path.join(DATA_DIR, "information_encoding_decoding")
+    info_encoding_extract = os.path.join(extract_dir, "information_encoding_decoding")
+    os.makedirs(info_encoding_extract, exist_ok=True)
+    
+    for file in os.listdir(info_encoding_dir):
+        src = os.path.join(info_encoding_dir, file)
+        if file.endswith(".tar"):
+            output_dir = os.path.join(info_encoding_extract, file.replace(".tar", ""))
+            print(f"  Extracting {file}...")
+            with tarfile.open(src) as tar:
+                tar.extractall(output_dir)
+        else:
+            print(f"  Copying {file}...")
+            shutil.copy2(src, os.path.join(info_encoding_extract, file))
+    
     print("Extraction complete!\n")
 
 
@@ -283,6 +300,9 @@ def main():
     print("\nThis script will:")
     print("  1. Download datasets from HuggingFace (~19GB)")
     print("  2. Extract tar files (~22 min)")
+    print("     - seed_to_sim_deterministic (Figures 2, 3, 4)")
+    print("     - sim_to_exp_diffusion (Figures 1, 5)")
+    print("     - information_encoding_decoding (Figure 6)")
     print("  3. Generate VAE latents (~43 min per dataset, GPU recommended)")
     print("  4. Download SD checkpoint and attach ControlNet (~5 min)")
     print("\nTotal estimated time: ~2-3 hours")
@@ -305,7 +325,9 @@ def main():
         print("SETUP COMPLETE!")
         print("=" * 70)
         print("\nYou can now run: python reproduce_figures.py")
-        print("Or train models using the prepared data in: {}".format(DATA_DIR))
+        print("  - Figures 1-5: Physics-constrained pattern prediction")
+        print("  - Figure 6: Information encoding/decoding (inverse problem)")
+        print("\nOr train models using the prepared data in: {}".format(DATA_DIR))
         print()
         
     except Exception as e:
